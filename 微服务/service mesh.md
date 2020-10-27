@@ -73,6 +73,22 @@ graph LR
 
 ## Istio
 
+Istio，Kubernetes的好帮手
+
+从场景来看，Kubernetes已经提供了非常强大的应用负载的部署、升级、扩容等运行管理能力。Kubernetes中的Service机制也已经可以做服务注册、服务发现和负载均衡，支持通过服务名访问到服务实例。
+
+从微服务的工具集观点来看，Kubernetes本身是支持微服务的架构，在Pod中部署微服务很合适，也已经解决了微服务的互访互通问题，但对服务间访问的管理如服务的熔断、限流、动态路由、调用链追踪等都不在Kubernetes的能力范围内。那么，如何提供一套从底层的负载部署运行到上层的服务访问治理端到端的解决方案？
+
+目前，最完美的答案就是在Kubernetes上叠加Istio这个好帮手。
+
+![istio](https://s1.ax1x.com/2020/10/27/BQ3QLF.md.png)
+
+Kubernetes的Service基于每个节点的Kube-proxy从Kube-apiserver上获取Service和Endpoint的信息，并将对Service的请求经过负载均衡转发到对应的 Endpoint 上。但Kubernetes只提供了4层负载均衡能力，无法基于应用层的信息进行负载均衡，更不会提供应用层的流量管理，在服务运行管理上也只提供了基本的探针机制，并不提供服务访问指标和调用链追踪这种应用的服务运行诊断能力。
+
+Istio复用了Kubernetes Service的定义，在实现上进行了更细粒度的控制。Istio的服务发现就是从Kube-apiserver中获取Service和Endpoint，然后将其转换成Istio服务模型的Service和ServiceInstance，但是其数据面组件不再是Kube-proxy，而是在每个Pod里部署的Sidecar，也可以将其看作每个服务实例的Proxy。这样，Proxy的粒度就更细了，和服务实例的联系也更紧密了，可以做更多更细粒度的服务治理通过拦截Pod的Inbound流量和Outbound流量，并在Sidecar上解析各种应用层协议，Istio可以提供真正的应用层治理、监控和安全等能力。
+
+
+
 ### 流量控制
 
 #### 主要功能
@@ -100,14 +116,11 @@ graph LR
 > 路由规则的集合，描述满足条件的请求去哪里
 
 - 将流量路由到给定目标地址
-
 - 请求地址与真实的工作负载解耦
-
 - 包含一组路由规则 
-
 - 通常和目标规则（Destination Rule）成对出现
-
 - 丰富的路由匹配规则
+- 将 Kubernetes 服务连接到 Istio Gateway。它还可以执行更多操作，例如定义一组流量路由规则，以便在主机被寻址时应用
 
 ### 目标规则（Destination Rule）
 

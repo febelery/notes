@@ -1,20 +1,16 @@
+## 定义
+
+1. kubernetes的本质是应用的生命周期管理，具体说是部署和管理（扩缩容、自动恢复、发布）
+2. kubernetes为微服务提供了可扩展、高弹性的部署和管理平台
+3. Service Mesh的基础是透明代理，通过sidecar proxy拦截到微服务间流量后再通过控制平面配置管理微服务的行为
+4. Service Mesh将流量管理从kubernetes中解耦，Service Mesh内部的流量无需`kube-proxy`组件的支持，通过为更接近微服务应用层的抽象，管理服务间的流量、安全性和可观察性
+5. Service Mesh是对kubernetes中的service更上层的抽象，它的下一步是serverless
+6. `kube-proxy`拦截进出kubernetes节点（集群内部）的流量，`sidecar proxy`拦截进出pod的流量
+7. 如果说 Kubernetes 管理的对象是 Pod，那么 Service Mesh 中管理的对象就是一个个 Service
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## 概念
 
 - service：将一组 Pod 暴露给外界访问的一种机制
 
