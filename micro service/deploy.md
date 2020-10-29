@@ -92,7 +92,7 @@ $ lsmod | grep -e ip_vs -e nf_conntrack_ipv4
 
 ## 安装
 
-> 安装参考  [高可用集群](https://www.funtl.com/zh/service-mesh-kubernetes/%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4.html)   [k8s高可用集群搭建](https://www.jianshu.com/p/3de558d8b57a)
+>  [高可用集群](https://www.funtl.com/zh/service-mesh-kubernetes/%E9%AB%98%E5%8F%AF%E7%94%A8%E9%9B%86%E7%BE%A4.html)   [k8s高可用集群搭建](https://www.jianshu.com/p/3de558d8b57a)
 
 ![拓扑](https://s1.ax1x.com/2020/10/20/Bppnot.png)
 
@@ -194,7 +194,7 @@ virtual_server 192.168.56.50 6443 {
 
 ### Dashboard
 
-参考这篇文章 [部署 Dashboard 和 metrics-server](https://tomoyadeng.github.io/blog/2019/08/11/k8s-dashboard-openssl/index.html)
+> [部署 Dashboard 和 metrics-server](https://tomoyadeng.github.io/blog/2019/08/11/k8s-dashboard-openssl/index.html)
 
 查看token 
 ```bash
@@ -215,8 +215,6 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
 ```
 
 ### ingress
-
-参考
 
 > [ingress在物理机上的nodePort和hostNetwork两种部署方式解析及比较](https://xuxinkun.github.io/2019/06/11/ingress/)
 >
@@ -286,13 +284,10 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
    $ helm install ingress-nginx ingress-nginx/ingress-nginx -f ingress-nginx.yaml
    ```
 
-   
 
 
 
 ### harbor
-
-参考
 
 > [通过 Helm 搭建 Docker 镜像仓库 Harbor](http://www.mydlq.club/article/66/)
 >
@@ -536,13 +531,6 @@ $ kubeadm join 192.168.56.50:6443 --token xx.xxx \
 ```bash
 $ kubeadm token create --print-join-command
 ```
-
-
-
-
-
-
-
 
 
 
