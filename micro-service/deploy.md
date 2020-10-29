@@ -196,10 +196,66 @@ virtual_server 192.168.56.50 6443 {
 
 > [部署 Dashboard 和 metrics-server](https://tomoyadeng.github.io/blog/2019/08/11/k8s-dashboard-openssl/index.html)
 
-查看token 
 ```bash
-kubectl -n kube-system describe secret $(kubectl get secret --all-namespaces | grep admin | awk '{print $2}')
+# 查看登录token
+$ kubectl -n kube-system describe secret $(kubectl get secret --all-namespaces | grep admin | awk '{print $2}')
 ```
+
+```yaml
+# dashboard.yaml
+# 配置 Ingress Nginx 提供访问入口
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kubernetes-dashboard-ingress
+  namespace: kubernetes-dashboard
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # 开启use-regex，启用path的正则匹配
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    # 默认为 true，启用 TLS 时，http请求会 308 重定向到https
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # 默认为 http，开启后端服务使用 proxy_pass https://协议
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  rules:
+  - host: dashboard.febelery.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: kubernetes-dashboard
+          servicePort: 443
+  tls:
+  - secretName: kubernetes-dashboard-certs
+    hosts:
+    - dashboard.febelery.com
+
+---
+
+# 新建管理员 
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin-user
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: admin-user
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: admin-user
+  namespace: kube-system
+```
+
+
 
 ### nfs
 
@@ -250,10 +306,10 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
       ```yaml
    type: NodePort
       nodePorts:
-     http: 32080
-        https: 32443
-     tcp:
-          8080: 32808
+       http: 32080
+       https: 32443
+       tcp:
+         8080: 32808
      ```
    
       
@@ -272,8 +328,9 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
       #   kubernetes.io/os: linux
       hostNetwork: true
       kind: DaemonSet
-      ## 这个绑定VIP（virtual IP）
-      externalIPs: [192.168.56.50]
+      ## 这个绑定外部IP 
+      ## https://kubernetes.io/zh/docs/concepts/services-networking/service/#external-ips
+      # externalIPs: [192.168.56.50]
       ```
       
       
@@ -284,7 +341,9 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
    $ helm install ingress-nginx ingress-nginx/ingress-nginx -f ingress-nginx.yaml
    ```
 
+4. 使用
 
+   在外部通过域名配置ingress时，可以用hosts指定任意一台`nodes`的IP地址即可
 
 
 ### harbor
