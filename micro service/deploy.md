@@ -218,8 +218,9 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
 
 参考
 
-- [ingress在物理机上的nodePort和hostNetwork两种部署方式解析及比较](https://xuxinkun.github.io/2019/06/11/ingress/)
-- [nginx ingress controller](https://kubernetes.github.io/ingress-nginx/deploy/)
+> [ingress在物理机上的nodePort和hostNetwork两种部署方式解析及比较](https://xuxinkun.github.io/2019/06/11/ingress/)
+>
+> [nginx ingress controller](https://kubernetes.github.io/ingress-nginx/deploy/)
 
 #### 安装ingress-nginx
 
@@ -255,7 +256,7 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
         https: 32443
      tcp:
           8080: 32808
-      ```
+     ```
    
       
    
@@ -279,7 +280,6 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
       
       
    
-
 3. 安装
 
    ```bash
@@ -294,10 +294,9 @@ $ mount -t nfs "nfs ip":/nfs /mnt/nfs
 
 参考
 
-- [通过 Helm 搭建 Docker 镜像仓库 Harbor](http://www.mydlq.club/article/66/)
-- [在 Kubernetes 在快速安装 Harbor](https://www.qikqiak.com/post/harbor-quick-install/)
-
-
+> [通过 Helm 搭建 Docker 镜像仓库 Harbor](http://www.mydlq.club/article/66/)
+>
+> [在 Kubernetes 在快速安装 Harbor](https://www.qikqiak.com/post/harbor-quick-install/)
 
 #### 新建PV、PVC
 
@@ -514,11 +513,11 @@ dnf install iproute-tc && dnf provides tc first
 
 #### kubeadm默认证书只有一年有效期
 
-```shell
-kubeadm alpha certs check-expiration
-```
+> [更新一个10年有效期的 Kubernetes 证书](https://www.qikqiak.com/post/update-k8s-10y-expire-certs/) 
 
-参考 [更新一个10年有效期的 Kubernetes 证书](https://www.qikqiak.com/post/update-k8s-10y-expire-certs/) 这篇文章
+```shell
+$ kubeadm alpha certs check-expiration
+```
 
 #### `kubeadm join`使用的token过期后，如何加入集群
 
@@ -535,7 +534,7 @@ $ kubeadm join 192.168.56.50:6443 --token xx.xxx \
 #### 查看`kubeadmin join`加入命令
 
 ```bash
-kubeadm token create --print-join-command
+$ kubeadm token create --print-join-command
 ```
 
 
