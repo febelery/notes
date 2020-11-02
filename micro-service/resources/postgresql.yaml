@@ -1,0 +1,121 @@
+## ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgsql-config
+  labels:
+    app: pgsql
+data:
+  POSTGRES_DB: pgsqldb
+  POSTGRES_USER: pgsqladmin
+  POSTGRES_PASSWORD: pgsqlpwd
+
+---
+
+## PV
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pgsql-pv
+  labels:
+    app: pgsql-pv
+    type: nfs
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  mountOptions:
+  - hard
+  - nfsvers=4.1
+  nfs:
+    path: /media/ross/hp/virtualbox/nfs/pgsql
+    server: 172.16.11.84
+
+---
+
+## PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pgsql-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels:
+      app: pgsql-pv
+
+---
+
+## PostgreSQL
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgsql
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: pgsql
+  template:
+    metadata:
+      labels:
+        app: pgsql
+    spec:
+      containers:
+      - name: pgsql
+        image: postgres:latest
+        imagePullPolicy: "IfNotPresent"
+        livenessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 300
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          tcpSocket:
+            port: 5432
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: pgsql-config
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: pgsqlvol
+      volumes:
+      - name: pgsqlvol
+        persistentVolumeClaim:
+            claimName: pgsql-pvc
+      
+---
+
+## service
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgsql-svc
+  labels:
+    app: pgsql
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+  selector:
+
+   app: pgsql
