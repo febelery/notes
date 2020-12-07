@@ -107,6 +107,32 @@ server {
 }
 ```
 
+- systemd
+
+```
+[Unit]
+Description=The nginx HTTP and reverse proxy server
+After=network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/bin/rm -f /var/run/nginx.pid
+ExecStartPre=/usr/local/nginx/sbin/nginx -t
+ExecStart=/usr/local/nginx/sbin/nginx
+ExecReload=/usr/local/nginx/sbin/nginx -s reload
+ExecStop=/usr/local/nginx/sbin/nginx -s quit
+KillSignal=SIGQUIT
+TimeoutStopSec=5
+KillMode=process
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+```
+
+
+
 
 
 ## 日志切割
@@ -129,3 +155,6 @@ server {
 ```
 
 强制轮询切割日志:  `logrotate -vf /etc/logrotate.d/nginx` (测试)
+
+
+

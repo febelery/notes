@@ -1,9 +1,29 @@
-
 ## 依赖
 
-```shell
+### ubuntu
+
+```
 sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf
 ```
+
+### centos 8
+
+```
+yum install libjpeg-turbo-devel libpng-devel libffi-devel libcurl-devel sqlite-devel libxml2-devel openssl-devel pcre-devel libzip-devel freetype-devel
+```
+
+#### oniguruma
+
+ oniguruma是一个处理正则表达式的库，mbstring的正则表达式处理功能对这个包有依赖性
+
+```bash
+yum install autoconf automake libtool
+wget https://github.com/kkos/oniguruma/archive/v6.9.6.tar.gz -O oniguruma-6.9.6.tar.gz 
+tar -zxvf oniguruma-6.9.6.tar.gz  && cd oniguruma-6.9.4/ 
+./autogen.sh && ./configure --prefix=/usr
+make && make install
+```
+
 
 
 ## 源码编译
@@ -35,9 +55,10 @@ sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev l
 --with-jpeg \
 --with-mhash \
 --with-zlib \
+--with-freetype \
 --with-mysqli=mysqlnd \
 --with-pdo-mysql=mysqlnd \
---with-pear=/usr/local/php/ear 
+--with-pear
 ```
 
 
@@ -76,7 +97,7 @@ backlog太小的话，NGINX之类client，根本进入不了FPM的accept queue�
 
 ulimit -a
 
-```shell
+```
 net.core.somaxconn = 512
 net.core.netdev_max_backlog = 1000
 net.ipv4.tcp_max_syn_backlog = 2048
@@ -118,4 +139,25 @@ SYN队列(待完成连接队列)和accept队列(已完成连接队列)。状态�
 
 
 
+
+
+- systemd
+
+`/usr/lib/systemd/system/php-fpm.service`
+
+```
+[Unit]
+Description=The PHP FastCGI Process Manager
+After=network.target
+
+[Service] 
+Type=simple
+PIDFile=/var/run/php-fpm.pid
+ExecStart=/usr/local/php/sbin/php-fpm
+ExecReload=/bin/kill -USR2 $MAINPID
+ExecStop=/bin/kill -INT $MAINPID
+
+[Install]
+WantedBy=multi-user.target
+```
 
