@@ -3,13 +3,13 @@
 ### ubuntu
 
 ```
-sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf
+sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf libicu-dev
 ```
 
 ### centos 8
 
 ```
-yum install libjpeg-turbo-devel libpng-devel libffi-devel libcurl-devel sqlite-devel libxml2-devel openssl-devel pcre-devel libzip-devel freetype-devel
+yum install libjpeg-turbo-devel libpng-devel libffi-devel libcurl-devel sqlite-devel libxml2-devel openssl-devel pcre-devel libzip-devel freetype-devel libicu-devel gcc-c++
 ```
 
 #### oniguruma
@@ -47,6 +47,7 @@ make && make install
 --enable-pcntl \
 --enable-shmop \
 --enable-ipv6 \
+--enable-intl \
 --with-curl \
 --with-zip \
 --with-openssl \
@@ -65,15 +66,15 @@ make && make install
 
 ## 配置
 
-- php-fpm.config
+### php-fpm
 
 ```
 [global]
-pid = /dev/shm/php-fpm.pid
+pid = /var/run/php-fpm.pid
 error_log = /var/log/php/php-fpm.log
 ```
 
-- backlog
+### backlog
 
 backlog是linux下socket函数之listen的参数，当应用程序调用listen系统调用让一个socket进入LISTEN状态时，需要指定一个backlog参数。这个参数经常被描述为，新连接队列的长度限制。
 
@@ -111,9 +112,13 @@ SYN队列(待完成连接队列)和accept队列(已完成连接队列)。状态�
 
 
 
-- 计算pm数量
+### pm
 
-当`pm = dynamic`时，可根据每个php-fpm占用的内存大小设置`pm.max_children`
+当`pm = dynamic`时，可根据每个php-fpm占用的内存大小设置`pm.max_children`，
+
+`真实占用内存 = 常驻内存 - 共享内存`，经过测试，每个php-fpm占用大概在3M到几十M之间
+
+> 比如一个8G内存的服务器，设置`pm = static` / `pm.max_children = 1600`，内存从5200M降为400M左右
 
 >**VIRT：virtual memory usage 虚拟内存
 >**1、进程“需要的”虚拟内存大小，包括进程使用的库、代码、数据等
@@ -141,7 +146,7 @@ SYN队列(待完成连接队列)和accept队列(已完成连接队列)。状态�
 
 
 
-- systemd
+### systemd
 
 `/usr/lib/systemd/system/php-fpm.service`
 
