@@ -3,7 +3,7 @@
 ### ubuntu
 
 ```
-sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf libicu-dev
+sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf libicu-dev libfreetype6-dev
 ```
 
 ### centos 8
