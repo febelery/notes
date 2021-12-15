@@ -35,30 +35,35 @@ make && make install
 --enable-opcache \
 --enable-opcache-jit \
 --enable-fpm \
+--with-iconv \
+--with-bz2 \
 --enable-bcmath \
---enable-mysqlnd \
 --enable-mbstring \
 --enable-pdo \
+--with-pdo-mysql \
+--with-mysqli \
+--enable-mysqlnd \
 --enable-fileinfo \
 --enable-mbregex \
 --enable-gd \
+--with-jpeg \
+--with-freetype \
+--enable-dom \
+--enable-simplexml \
+--enable-session \
 --enable-sockets \
 --enable-calendar \
 --enable-pcntl \
 --enable-shmop \
 --enable-ipv6 \
---enable-intl \
 --with-curl \
 --with-zip \
 --with-openssl \
 --with-pcre-jit \
 --with-ffi \
---with-jpeg \
 --with-mhash \
 --with-zlib \
---with-freetype \
---with-mysqli=mysqlnd \
---with-pdo-mysql=mysqlnd \
+--with-zlib-dir \
 --with-pear
 ```
 
