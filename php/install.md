@@ -3,13 +3,13 @@
 ### ubuntu
 
 ```
-sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf libicu-dev libfreetype6-dev
+sudo apt install -y libsqlite3-dev libssl-dev libcurl4-openssl-dev libjpeg-dev libonig-dev libzip-dev autoconf libicu-dev libfreetype6-dev libsodium-dev unzip
 ```
 
 ### centos 8
 
 ```
-yum install libjpeg-turbo-devel libpng-devel libffi-devel libcurl-devel sqlite-devel libxml2-devel openssl-devel pcre-devel libzip-devel freetype-devel libicu-devel gcc-c++
+yum install libjpeg-turbo-devel libpng-devel libffi-devel libcurl-devel sqlite-devel libxml2-devel openssl-devel pcre-devel libzip-devel freetype-devel libicu-devel gcc-c++ libsodium-devel
 ```
 
 #### oniguruma
@@ -31,40 +31,44 @@ make && make install
 - `--with-pear`这个参数是用于生成`pecl`命令
 
 ```bash
-./configure --prefix=/usr/local/php \
---enable-opcache \
---enable-opcache-jit \
---enable-fpm \
---with-iconv \
---with-bz2 \
---enable-bcmath \
---enable-mbstring \
---enable-pdo \
---with-pdo-mysql \
---with-mysqli \
---enable-mysqlnd \
---enable-fileinfo \
---enable-mbregex \
---enable-gd \
---with-jpeg \
---with-freetype \
---enable-dom \
---enable-simplexml \
---enable-session \
---enable-sockets \
---enable-calendar \
---enable-pcntl \
---enable-shmop \
---enable-ipv6 \
---with-curl \
---with-zip \
---with-openssl \
---with-pcre-jit \
---with-ffi \
---with-mhash \
---with-zlib \
---with-zlib-dir \
---with-pear
+./configure  \
+	--prefix=/usr/local/php \
+	--enable-opcache \
+	--enable-opcache-jit \
+	--enable-intl \
+	--enable-fpm \
+	--enable-bcmath \
+	--enable-mbstring \
+	--enable-pdo \
+	--enable-dom \
+	--enable-simplexml \
+	--enable-session \
+	--enable-sockets \
+	--enable-calendar \
+	--enable-pcntl \
+	--enable-shmop \
+	--enable-ipv6 \
+	--with-iconv \
+	--with-bz2 \
+	--with-pdo-mysql \
+	--with-mysqli \
+	--enable-mysqlnd \
+	--enable-fileinfo \
+	--enable-mbregex \
+	--enable-gd \
+	--with-jpeg \
+	--with-freetype \
+	--with-curl \
+	--with-zip \
+	--with-openssl \
+	--with-pcre-jit \
+	--with-ffi \
+	--with-mhash \
+	--with-zlib \
+	--with-zlib-dir \
+	--with-pear \
+	--with-gettext \
+	--with-sodium
 ```
 
 
